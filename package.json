@@ -1,0 +1,15 @@
+{
+  "name": "rb",
+  "version": "1.0.0",
+  "description": "E-commerce app for RB",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Saugat Dahal",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.1",
+    "mongoose": "^5.11.12"
+  }
+}
