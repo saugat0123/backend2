@@ -6,6 +6,7 @@ const db = require('./database/db')
 
 const app = express()
 const customer_route = require('./routes/customer_route')
+const { check, validationResult } = require('express-validator')
 app.use(express.json())
 
 app.use(customer_route)

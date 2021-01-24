@@ -2,23 +2,18 @@ const mongoose = require('mongoose')
 
 const Customer = mongoose.model('Customer', {
     firstName: {
-        type: String
+        type: String,
+        required : true
         },
 
     lastName: {
-            type: String
+            type: String,
+            required : true
             },
-            
-    username: {
-    type: String
-    },
 
     password: {
-        type: String
-        },
-
-    dob: {
-        type: String
+        type: String,
+        required : true
         },
 
     address: {
@@ -30,7 +25,9 @@ const Customer = mongoose.model('Customer', {
         },
 
     email: {
-            type: String
+            type: String,
+            required : true,
+            unique : true
             },
    })
 
