@@ -3,6 +3,7 @@ const { check, validationResult } = require('express-validator');
 const Customer = require('../models/customer_model')
 const router = express.Router()
 const bcryptjs = require('bcryptjs')
+const jwt = require('jsonwebtoken')
 
 router.post('/customer/insert',[
     check('firstName','Username is required').not().isEmpty(),
@@ -12,7 +13,7 @@ router.post('/customer/insert',[
 ], 
 function(req,res) {
     const validationError = validationResult(req)
-    res.send(validationError.array())
+  //  res.send(validationError.array())
 
     // validation
     if(validationError.isEmpty()){ 
@@ -24,7 +25,7 @@ function(req,res) {
     const email = req.body.email
 
     bcryptjs.hash(password, 10, function(e, hash_password){
-        const data = new Customer({
+        const CustomerData = new Customer({
             firstName: firstName,
             lastName: lastName,
             password: hash_password,
@@ -32,10 +33,12 @@ function(req,res) {
             phone: phone,
             email: email
             })
-            data.save()
-            .then()
-            .catch(function(err1){
-                res.status(500).json({message : err1})
+            CustomerData.save()
+            .then(function(result){
+                res.status(201).json({message : "Item Added!!"})
+            })
+            .catch(function(e){
+                res.status(500).json({message : e})
             })
     })
     
@@ -45,7 +48,7 @@ function(req,res) {
     }
     });
 
-router.get('/customer/insert',function(req,res){
+router.get('/customer/login',function(req,res){
     const email = req.body.email
     const password = req.body.password
 
@@ -56,15 +59,42 @@ router.get('/customer/insert',function(req,res){
            return res.status(403).json({error_message : "Invalid credentials!"})
         }
         // customer found
-        bcryptjs.compare( password, customerData.password, function(err, result){
-            if(err == false){
+        bcryptjs.compare( password, customerData.password, function(_err, result){
+            if(result == false){
                 return res.status(403).json({error_message : "Invalid Password!"})
             }
-            res.send("Correct Password")
+            //email and password valid -> valid user
+            //token generate
+            const token = jwt.sign({customerId: customerData._id},'secret_key')
+            res.status(200).json({
+                token: token, 
+                message: "Authorization successful"
+            })
         })
 
     })
-    .catch()
+    .catch(function(e){
+        res.status(500).json({error: e})
+    })
+})
+
+//use put for update
+router.put("/customer/update", function(req,res){
+    const firstName = req.body.firstName
+    const lastName = req.body.lastName
+    const password = req.body.password
+    const address = req.body.address
+    const phone = req.body.phone
+    const email = req.body.email
+    const id = req.body.customerId
+
+    products.updateOne({_id : customerId}, {firstName : firstName, lastName : lastName})
+    .then(function(result){
+        res.status(200).json({status: success})
+    })
+    .catch(function(e){
+        res.status(200).json({error: e})
+    })
 })
 
 module.exports = router
