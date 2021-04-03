@@ -1,11 +1,18 @@
 {
+<<<<<<< HEAD
   "name": "protein",
   "version": "1.0.0",
   "description": "Assignment",
+=======
+  "name": "rb",
+  "version": "1.0.0",
+  "description": "E-commerce app for RB",
+>>>>>>> d16c98b2dc9dedf147084b2fba388b8bfeee4bb7
   "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
+<<<<<<< HEAD
   "author": "RakeshShrestha",
   "license": "ISC",
   "dependencies": {
@@ -16,5 +23,15 @@
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.11.12",
     "multer": "^1.4.2"
+=======
+  "author": "Saugat Dahal",
+  "license": "ISC",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "express": "^4.17.1",
+    "express-validator": "^6.9.2",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^5.11.12"
+>>>>>>> d16c98b2dc9dedf147084b2fba388b8bfeee4bb7
   }
 }
