@@ -1,33 +1,49 @@
-//PROTECT THE MIDDLEWARE
-const jwt = require("jsonwebtoken");
-const asyncHandler = require("./async");
-const ErrorResponse = require("../utils/errorResponse");
-const User = require("../model/user");
+//the function of the guard
+const { json } = require('express');
+const jwt=require('jsonwebtoken');
+const { findOne } = require('../models/proteinModel');
+const Register = require('../models/register_model');
 
-//Protect routes
-exports.protect = asyncHandler(async (req, res, next) => {
-  let token;
-
-  if (
-    req.headers.authorization &&
-    req.headers.authorization.startsWith("Bearer")
-  ) {
-    // Set token from Bearer token in header
-    token = req.headers.authorization.split(" ")[1];
-  }
-
-  //Make sure token exist
-  if (!token) {
-    return next(new ErrorResponse("Unauthorized route access", 401));
-  }
-
-  try {                 
-    //Verify token
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    console.log(decoded);
-    req.user = await User.findById(decoded.id);
+module.exports.verifyUser=function(req,res,next){
+    try{
+        const token=req.headers.authorization.split(" ")[1];
+        const data=jwt.verify(token,'secretkey');
+        
+        Register.findOne({_id:data.userId})
+        .then(function(result){
+            console.log(result)
+            req.userInfo=result;
+            next();
+        })
+        .catch(function(e){
+            res.status(401).json({error:e})
+        })
+    
+    }
+    catch(e){
+        res.status(401).json({error:e})
+    }
+}
+//guard for admin
+module.exports.verifyAdmin=function(req,res,next){
+    console.log(req.userInfo)
+    if(!req.userInfo){
+        return res.status(401).json({message:"Invalid User!!"});
+    }
+    else if(req.userInfo.userType!=='Admin'){
+        return res.status(401).json({message:"Unauthorizedmmmmm!!"})
+    }
     next();
-  } catch (err) {
-    return next(new ErrorResponse("Unauthorized route access", 401));
-  }
-});
+}
+
+
+//guard for admin
+module.exports.verifyCustomer=function(req,res,next){
+    if(!req.userInfo){
+        return res.status(401).json({message:"Invalid User!!"});
+    }
+    else if(req.userInfo.userType!=='Customer'){
+        return req.status(401).json({message:"Unauthorized!!"})
+    }
+    next();
+}
