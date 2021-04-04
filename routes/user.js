@@ -1,6 +1,6 @@
 const express=require('express');
 const { model } = require('mongoose');
-const Register=require('../models/register_model');
+const User=require('../models/user');
 // const{ route }=require('')
 const router=express.Router();
 const{check,validationResult}=require('express-validator');
@@ -9,7 +9,7 @@ const jwt=require('jsonwebtoken');
 
 
 router.post('/register',[
-    check('username','username not inserted!!').not().isEmpty(),
+    check('email','email not inserted!!').not().isEmpty(),
     check('password','password not inserted!!').not().isEmpty()
 ],function(req,res){
     const validationErr=validationResult(req);
@@ -17,13 +17,23 @@ router.post('/register',[
    // res.send(validationErr.array());
    if(validationErr.isEmpty()) 
    {
-        const username=req.body.username;
-        const password=req.body.password;
-        const email=req.body.email;
+    const firstName = req.body.firstName
+    const lastName = req.body.lastName
+    const password = req.body.password
+    const address = req.body.address
+    const phone = req.body.phone
+    const email = req.body.email
         bcryptjs.hash(password,10,function(err,hash_password){
-            const data=new Register({username:username,password:hash_password,email:email})
+            const data=new User({
+                firstName: firstName,
+                lastName: lastName,
+                password: hash_password,
+                address: address,
+                phone: phone,
+                email: email
+            })
             data.save().then(function(result){
-                res.status(201).json({message:"Registered!!"})
+                res.status(201).json({message:"User Registered!!"})
             }).catch(function(err1){
                 res.status(500).json({message : err1})
             })
@@ -37,25 +47,25 @@ router.post('/register',[
 })
 
 
-router.post('/user/login',function(req,res){
+router.post('/login',function(req,res){
     const email=req.body.email;
     const password=req.body.password;
 
-    Register.findOne({email:email})
-    .then(function(customerData){
-        if(customerData===null){
+    User.findOne({email:email})
+    .then(function(userData){
+        if(userData===null){
             //user not found
             return res.status(403).json({message:"invalid details!!"})
         }
         //found user
-        bcryptjs.compare(password,customerData.password,function(err,result){
+        bcryptjs.compare(password,userData.password,function(err,result){
             if(result===false){
                 return res.status(403).json({message:"invalid details!!"})
             }
-            const token=jwt.sign({userId:customerData._id},'secretkey')
+            const token=jwt.sign({userId:userData._id},'secretkey')
             res.status(200).json({
                 token:token,
-                message:"auth sucess!!",usertype:customerData.userType
+                message:"auth sucess!!",usertype:userData.userType
             })
         })
     })

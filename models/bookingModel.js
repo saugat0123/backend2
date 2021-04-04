@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const Product=require('./proteinModel');
+const Product=require('./item');
 const date = new Date().toLocaleDateString("en-US").split("/").toString()
 const Booking = mongoose.model('Booking',{
  

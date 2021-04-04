@@ -1,16 +1,15 @@
-<<<<<<< HEAD
 //the function of the guard
 const { json } = require('express');
 const jwt=require('jsonwebtoken');
-const { findOne } = require('../models/proteinModel');
-const Register = require('../models/register_model');
+const { findOne } = require('../models/item');
+const User = require('../models/user');
 
 module.exports.verifyUser=function(req,res,next){
     try{
         const token=req.headers.authorization.split(" ")[1];
         const data=jwt.verify(token,'secretkey');
         
-        Register.findOne({_id:data.userId})
+        User.findOne({_id:data.userId})
         .then(function(result){
             console.log(result)
             req.userInfo=result;
@@ -48,12 +47,6 @@ module.exports.verifyCustomer=function(req,res,next){
     }
     next();
 }
-=======
-const jwt = require('jsonwebtoken')
-const Customer = require('../models/customer_model')
-const Admin = require('../models/user_model')
-
-
 
 // verify Customer guard
 module.exports.authCustomer = function(req,res,next){
@@ -106,4 +99,3 @@ module.exports.authCustomer = function(req,res,next){
 //         res.status(401).json({err: e})
 //     }
 // }
->>>>>>> d16c98b2dc9dedf147084b2fba388b8bfeee4bb7

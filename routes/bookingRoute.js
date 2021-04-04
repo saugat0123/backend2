@@ -3,7 +3,7 @@ const express = require('express')
 const { verifyUser } = require('../middleware/auth')
 const router = express.Router()
 const Booking=require('../models/bookingModel')
-const Product=require('../models/proteinModel')
+const Product=require('../models/item')
 const date = new Date().toLocaleDateString("en-US").split("/").toString()
  
 router.post('/booking/:pid',verifyUser,function(req,res){
