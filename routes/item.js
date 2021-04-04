@@ -6,7 +6,7 @@ const auth = require('../middleware/auth');
 const upload = require('../middleware/upload');
 
 //insert paxi ko :,auth.verifyUser,auth.verifyAdmin
-router.post('/add/item', upload.single('pimage'), function (req, res) {
+router.post('/add/item',auth.verifyUser,auth.verifyAdmin ,upload.single('pimage'), function (req, res) {
     if (req.file == undefined) {
         return res.status(400).json({
             message: "Only jpg,jpeg,png,gif files are allowed"
@@ -18,7 +18,6 @@ router.post('/add/item', upload.single('pimage'), function (req, res) {
         const itemPrice = req.body.itemPrice
         const itemRating = req.body.itemRating
         const itemImage = req.file.filename;
-
         const itemData = new Item({
             itemName: itemName,
             itemType: itemType,
@@ -33,7 +32,7 @@ router.post('/add/item', upload.single('pimage'), function (req, res) {
             .catch(function (e) {
                 res.status(500), json({ abc: e })
             })
-    }
+        }
 })
 
 router.put("/update/item", auth.verifyUser, auth.verifyAdmin, function (req, res) {

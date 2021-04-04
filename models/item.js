@@ -18,7 +18,7 @@ const Item=mongoose.model("Item",{
         itemRating: {
             type: String
         },
-        pimage: {
+        itemImage: {
             type: String,
             default: "no-photo.jpg",
           }

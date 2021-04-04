@@ -23,6 +23,7 @@ router.post('/register',[
     const address = req.body.address
     const phone = req.body.phone
     const email = req.body.email
+    const userType = req.body.userType
         bcryptjs.hash(password,10,function(err,hash_password){
             const data=new User({
                 firstName: firstName,
@@ -30,7 +31,8 @@ router.post('/register',[
                 password: hash_password,
                 address: address,
                 phone: phone,
-                email: email
+                email: email,
+                userType: userType
             })
             data.save().then(function(result){
                 res.status(201).json({message:"User Registered!!"})
@@ -74,4 +76,7 @@ router.post('/login',function(req,res){
     })
 })
 
+// router.get('/me', (req,res) =>{
+
+// })
 module.exports=router;

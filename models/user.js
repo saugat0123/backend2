@@ -1,5 +1,5 @@
 const mongoose=require('mongoose');
-const User=mongoose.model('Register',{
+const User=mongoose.model('User',{
     firstName : {
         type : String,
         // required : [true,'Enter first name']
