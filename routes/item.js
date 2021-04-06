@@ -35,14 +35,14 @@ router.post('/add/item',auth.verifyUser,auth.verifyAdmin ,upload.single('pimage'
         }
 })
 
-router.put("/update/item", auth.verifyUser, auth.verifyAdmin, function (req, res) {
-    const ntitle = req.body.ptitle;
-    const ndesc = req.body.pdesc;
-    const nprice = req.body.pprice;
+router.put("/update/item", function (req, res) {
+    const itemName = req.body.itemName;
+    const itemType = req.body.itemType;
+    const itemPrice = req.body.itemPrice;
     const id = req.body.Id;
+console.log(req.body)
 
-
-    Item.updateOne({ _id: id }, { ptitle: ntitle, pdesc: ndesc, pprice: nprice })
+    Item.updateOne({ _id: id }, { itemName: itemName, itemType: itemType, itemPrice: itemPrice })
         .then(function (result) {
             res.status(200).json({ message: "Updated" })
         })

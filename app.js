@@ -5,7 +5,7 @@ const cors = require('cors');
 const db=require('./database/db');
 const user_route=require('./routes/user');
 const item_route=require('./routes/item');
-const bookingRoute=require('./routes/bookingRoute');
+const cart_route=require('./routes/cart');
 
 const app=express();
 app.use(cors());
@@ -14,6 +14,6 @@ app.use(express.json());
 app.use(bodyParser.urlencoded({extended:false}));
 app.use(user_route);
 app.use(item_route);
-app.use(bookingRoute);
+app.use(cart_route);
 
 app.listen(3001);
