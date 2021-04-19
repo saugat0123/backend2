@@ -77,7 +77,15 @@ router.post('/login',function(req,res){
     })
 })
 
-// router.get('/me', (req,res) =>{
+router.get("/me/:id", function (req, res) {
+    const id = req.params.id;
+    User.findById({ _id: id })
+        .then(function (data) {
+            res.status(200).json(data)
+        })
+        .catch(function (er) {
+            res.status(500).json({ error: e })
+        })
+})
 
-// })
-module.exports=router;
+module.exports=router;  

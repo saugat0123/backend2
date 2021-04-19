@@ -6,24 +6,24 @@ const auth = require('../middleware/auth');
 const upload = require('../middleware/upload');
 
 //insert paxi ko :,auth.verifyUser,auth.verifyAdmin
-router.post('/add/item',auth.verifyUser,auth.verifyAdmin ,upload.single('pimage'), function (req, res) {
+router.post('/add/item',upload.single('image'),auth.verifyUser , function (req, res) {
     if (req.file == undefined) {
         return res.status(400).json({
             message: "Only jpg,jpeg,png,gif files are allowed"
         })
     }
-    else {
+    
         const itemName = req.body.itemName
         const itemType = req.body.itemType
         const itemPrice = req.body.itemPrice
         const itemRating = req.body.itemRating
-        const itemImage = req.file.filename;
+        const image = req.file.filename;
         const itemData = new Item({
             itemName: itemName,
             itemType: itemType,
             itemPrice: itemPrice,
             itemRating: itemRating,
-            itemImage: itemImage
+            itemImage: image
         });
         itemData.save()
             .then(function (result) {
@@ -32,7 +32,7 @@ router.post('/add/item',auth.verifyUser,auth.verifyAdmin ,upload.single('pimage'
             .catch(function (e) {
                 res.status(500), json({ abc: e })
             })
-        }
+        
 })
 
 router.put("/update/item", function (req, res) {
@@ -76,7 +76,7 @@ router.get("/item/all", function (req, res) {
 
 router.get("/item/:id", function (req, res) {
     const id = req.params.id;
-    Item.findOne({ _id: id })
+    Item.findById({ _id: id })
         .then(function (data) {
             res.status(200).json(data);
         })
