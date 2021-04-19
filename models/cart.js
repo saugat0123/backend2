@@ -1,14 +1,14 @@
 const mongoose = require('mongoose');
-const Product=require('./item');
+const Item=require('./item');
 const date = new Date().toLocaleDateString("en-US").split("/").toString()
 const RowOfCart=new mongoose.Schema({
     productId:{
       type:mongoose.Schema.Types.ObjectId,
-      ref:'Product'
+      ref:'Item'
   },
   seller:{
     type:mongoose.Schema.Types.ObjectId,
-    ref:'Register'
+    ref:'User'
   },
   productName:{
     type:String,
@@ -39,7 +39,7 @@ const RowOfCart=new mongoose.Schema({
   ({
     userId:{
         type: mongoose.Schema.Types.ObjectId,
-        ref:'Register'
+        ref:'User'
     },
     
     product:[RowOfCart]
