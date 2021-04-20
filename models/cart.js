@@ -2,14 +2,10 @@ const mongoose = require('mongoose');
 const Item=require('./item');
 const date = new Date().toLocaleDateString("en-US").split("/").toString()
 const RowOfCart=new mongoose.Schema({
-    productId:{
-      type:mongoose.Schema.Types.ObjectId,
-      ref:'Item'
-  },
-  seller:{
+  productId:{
     type:mongoose.Schema.Types.ObjectId,
-    ref:'User'
-  },
+    ref:'Product'
+},  
   productName:{
     type:String,
       required:true

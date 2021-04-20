@@ -10,44 +10,64 @@ const date = new Date().toLocaleDateString("en-US").split("/").toString()
 const auth = require('../middleware/auth');
 
 router.get('/cart', verifyUser, function (req, res, next) {
-    //console.log(req.user)
     const uid = req.userInfo._id
-
-    User.findById({ _id: uid }).then(user => {
-
-        if (user.cart.length === 0) {
-            cart.create({ userId: uid, product: [] }).then(cart => {
-                user.cart.push(cart._id)
-                user.save().then(user => {
-                    res.json(cart)
-                }).catch(err => next(err))
-            })
-        } else {
-            cart.findById(user.cart[0]).then(cart => {
-                res.json(cart)
-            }).catch(err => next(err))
-        }
-
-
+    cart.findOne({ userId: uid }).then(cart => {
+        if (cart) {
+            res.json(cart)
+        } 
     }
-    ).catch(err => next(err));
+    ).catch(err => {next(err)
+    console.log("erer",err)});
 
 })
+
+
 router.route('/cart').post(verifyUser, (req, res, next) => {
     const uid = req.userInfo._id
 
     User.findById({ _id: uid }).then(user => {
-        cart.findById({ _id: user.cart[0] }).then(cart => {
-            cart.product.push(req.body)
-            cart.save().then(cart => {
-                res.json(cart)
-            }).catch(error => next(error))
+        cart.findOne({ userId: user._id }).then(result => {
+            console.log("result",result)
+            if (result===null) {
+                const cartItem = new cart({  
+                    product:[{
+                    productId:req.body.productId,
+                    productName: req.body.productName,
+                    productPrice: req.body.productPrice,
+                    productImage: req.body.productImage,
+                    productPrice: req.body.productPrice,
+                    quantity: req.body.quantity,
+                    total: req.body.productPrice * req.body.quantity
+                    }],
+                    userId:user._id
+                    })
+                cartItem.save().then(cartResult => {
+                    res.json(cartResult)
+                }).catch(error => next(error))
+            }
+            else{
+                cart.findOneAndUpdate({userId:uid},{$push:{
+                    product:[{
+                        productId:req.body.productId,
+                        productName: req.body.productName,
+                        productPrice: req.body.productPrice,
+                        productImage: req.body.productImage,
+                        productPrice: req.body.productPrice,
+                        quantity: req.body.quantity,
+                        total: req.body.productPrice * req.body.quantity
+                        }]
+                }},{new:true}).then(update => {
+                    res.json(update)
+                }).catch(error=> next(error))
+            }
 
         }).catch(error => next(error))
 
 
     }).catch(error => next(error))
 })
+
+
 
 router.get('/cart/show', verifyUser, function (req, res) {
     const id = req.userInfo._id
