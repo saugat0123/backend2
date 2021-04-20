@@ -38,10 +38,18 @@ beforeAll(async() =>{
 
 
         // })
-        it('to test the update', async() =>{
-        return Item.findOneAndUpdate({_id :Object('607eb914fa4bd419d08848a0')},
-             {$set :{itemName:'daley'}})
-                .then((fdn)=>{
-            expect(fdn.itemName).toEqual('fgh')
-            })
-             });
+        // it('to test the update', async() =>{
+        // return Item.findOneAndUpdate({_id :Object('607eb914fa4bd419d08848a0')},
+        //      {$set :{itemName:'daley'}})
+        //         .then((fdn)=>{
+        //     expect(fdn.itemName).toEqual('fgh')
+        //     })
+        //      });
+
+
+       // the code below is for delete testing
+            it('to test the delete food is working or not', async() =>{
+            const status= await Item.deleteMany();
+            expect(status.ok).toBe(1);
+            });
+        

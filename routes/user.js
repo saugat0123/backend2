@@ -88,4 +88,29 @@ router.get("/me/:id", function (req, res) {
         })
 })
 
+router.put("/update/user", function (req, res) {
+    const firstName = req.body.firstName
+    const lastName = req.body.lastName
+    const password = req.body.password
+    const address = req.body.address
+    const phone = req.body.phone
+    const email = req.body.email
+    const id = req.body.Id;
+console.log(req.body)
+
+    User.updateOne({ _id: id }, { 
+        firstName: firstName,
+        lastName: lastName,
+        address: address,
+        phone: phone,
+        email: email, })
+        .then(function (data) {
+            res.status(200).json(data)
+        })
+        .catch(function (e) {
+            res.status(500).json({ error: e })
+        })
+
+})
+
 module.exports=router;  
